@@ -5,7 +5,7 @@ class SnekGame:
     def __init__(self):
         self.running = True
         self.displaySurf = None
-        self.size = self.weigght, self.height = 600, 600
+        self.size = self.weight, self.height = 500, 500
     
     def on_init(self):
         pygame.init()
@@ -35,3 +35,5 @@ class SnekGame:
             self.on_loop()
             self.on_render()
         self.on_cleanup()
+
+SnekGame().on_execute()
