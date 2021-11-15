@@ -1,16 +1,23 @@
 import pygame
 from pygame.locals import *
+from Grid import *
 
 class SnekGame:
-    def __init__(self):
-        self.running = True
+    def __init__(self, width, height, size, thickness):
         self.displaySurf = None
-        self.size = self.weight, self.height = 500, 500
+        self.displayRes = self.width, self.height = width, height
+        self.size = size
+        self.thickness = thickness
+
+        self.on_init()
+        self.on_execute()
     
     def on_init(self):
         pygame.init()
-        self.displaySurf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.displaySurf = pygame.display.set_mode(self.displayRes, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.running = True
+
+        self.grid = Grid(self.displaySurf, self.width, self.height, self.size, self.thickness)
     
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -34,6 +41,10 @@ class SnekGame:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
+
+            pygame.display.flip()
+            pygame.display.update()
+
         self.on_cleanup()
 
-SnekGame().on_execute()
+SnekGame(width=500,height=500,size=10,thickness=1)
