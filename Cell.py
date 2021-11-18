@@ -28,20 +28,3 @@ class Cell:
                                 self.rect.h-self.thickness)
         pygame.draw.rect(self.surface, color, innerRect)  # Fill
         pygame.draw.rect(self.surface, (255,255,255), self.rect, width=self.thickness)  # Border
-
-
-class Grid:
-    def __init__(self, surface, width, height, size, thickness):
-        self.surface = surface
-
-        # Init Grid 
-        self.grid = []
-
-        for y in range(0,height,size):
-            row = []
-            for x in range(0,width,size):
-                cell = Cell(self.surface, x, y, size, thickness, state=None)
-                cell.render()
-
-                row.append(cell)
-            self.grid.append(row)
