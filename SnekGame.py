@@ -1,16 +1,12 @@
 import pygame
 from pygame.locals import *
-from Cell import *
 
 class SnekGame:
-    def __init__(self, width, height, size, thickness):
+    def __init__(self, width, height, size, thickness=1):
         self.displayRes = self.width, self.height = width, height
         self.size = size
         self.thickness = thickness        
 
-        self.on_execute()
-    
-    def on_init(self):
         # Init Window
         pygame.init()
         self.displaySurf = pygame.display.set_mode(self.displayRes, pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -23,14 +19,31 @@ class SnekGame:
             row = []
             for x in range(0, self.width, self.size):
                 cell = Cell(self.displaySurf, x, y, self.size, self.thickness, state=None)
-                cell.render()
+                self.render_cell(cell)
 
                 row.append(cell)
             self.grid.append(row)
 
         # Init Snake Head
         self.grid[1][1].state = "apple"
+        print(self.grid[1][1].borderRect)
+        print(self.grid[1][1].innerRect)
         self.grid[1][1].render()
+
+        self.main()
+    
+    def render_cell(self, cell):
+        if self.state == "head":
+            color = pygame.Color(0,255,0)
+        elif self.state == "tail":
+            color = pygame.Color(0,255,135)
+        elif self.state == "apple":
+            color = pygame.Color(255,0,0)
+        else:
+            color = pygame.Color(0,0,0)
+
+        pygame.draw.rect(self.displaySurf, (255,255,255), cell.borderRect, width=self.thickness)  # Border
+        pygame.draw.rect(self.displaySurf, color, cell.innerRect)  
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -45,10 +58,7 @@ class SnekGame:
     def on_cleanup(self):
         pygame.quit()
     
-    def on_execute(self):
-        if self.on_init() == False:
-            self.running = False
-        
+    def main(self):
         while self.running:
             for event in pygame.event.get():
                 self.on_event(event)
@@ -56,8 +66,7 @@ class SnekGame:
             self.on_render()
 
             pygame.display.flip()
-            pygame.display.update()
 
         self.on_cleanup()
 
-SnekGame(width=500,height=500,size=10,thickness=1)
+snekGame = SnekGame(width=500, height=500,size=50)
