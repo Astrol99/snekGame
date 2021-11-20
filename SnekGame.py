@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from Cell import *
 
 class SnekGame:
     def __init__(self, width, height, size, thickness=1):
@@ -18,32 +19,16 @@ class SnekGame:
         for y in range(0, self.height, self.size):
             row = []
             for x in range(0, self.width, self.size):
-                cell = Cell(self.displaySurf, x, y, self.size, self.thickness, state=None)
-                self.render_cell(cell)
+                cell = Cell(self.displaySurf, x, y, self.size)
+                cell.render()
 
                 row.append(cell)
             self.grid.append(row)
-
-        # Init Snake Head
-        self.grid[1][1].state = "apple"
-        print(self.grid[1][1].borderRect)
-        print(self.grid[1][1].innerRect)
-        self.grid[1][1].render()
+        
+        self.grid[0][0].state = "head"
+        self.grid[0][0].render()
 
         self.main()
-    
-    def render_cell(self, cell):
-        if self.state == "head":
-            color = pygame.Color(0,255,0)
-        elif self.state == "tail":
-            color = pygame.Color(0,255,135)
-        elif self.state == "apple":
-            color = pygame.Color(255,0,0)
-        else:
-            color = pygame.Color(0,0,0)
-
-        pygame.draw.rect(self.displaySurf, (255,255,255), cell.borderRect, width=self.thickness)  # Border
-        pygame.draw.rect(self.displaySurf, color, cell.innerRect)  
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -69,4 +54,4 @@ class SnekGame:
 
         self.on_cleanup()
 
-snekGame = SnekGame(width=500, height=500,size=50)
+snekGame = SnekGame(width=500, height=500, size=50)

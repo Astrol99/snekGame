@@ -6,12 +6,25 @@ class SnekPart:
         self.prev = prev
 
 class Cell:
-    def __init__(self, surface, x, y, size, state, width):
+    def __init__(self, surface, x, y, size, thickness=1, state=None):
         self.surface = surface
         self.state = state
         self.thickness = thickness
-        self.borderRect = pygame.Rect(x, y, x+size, y+size)
+        self.borderRect = pygame.Rect(x, y, size, size)
         self.innerRect = pygame.Rect(self.borderRect.x+self.thickness, 
                                     self.borderRect.y+self.thickness, 
                                     self.borderRect.w-self.thickness,
                                     self.borderRect.h-self.thickness)
+
+    def render(self):
+        if self.state == "head":
+            color = pygame.Color(0,255,0)
+        elif self.state == "tail":
+            color = pygame.Color(0,255,135)
+        elif self.state == "apple":
+            color = pygame.Color(255,0,0)
+        else:
+            color = pygame.Color(0,0,0)
+
+        pygame.draw.rect(self.surface, (255,255,255), self.borderRect, width=self.thickness)  # Border
+        pygame.draw.rect(self.surface, color, self.innerRect)
