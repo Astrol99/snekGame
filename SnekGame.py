@@ -32,6 +32,8 @@ class SnekGame:
 
         self.snekHead.direction = "right"
 
+        self.clock = pygame.time.Clock()
+
         self.main()
 
     def on_event(self, event):
@@ -48,20 +50,15 @@ class SnekGame:
                 self.snekHead.direction = "right"
     
     def on_loop(self):
-        temp = self.snekHead
-        temp.state = None
+        previous = self.snekHead
 
-        if 0 <= self.snekHead.x <= self.width and 0 <= self.snekHead.y <= self.height: 
-            if self.snekHead.direction == "up":
-                self.snekHead = self.grid[self.snekHead.indexX][self.snekHead.indexY+1]
-            elif self.snekHead.direction == "down":
-                self.snekHead = self.grid[self.snekHead.indexX][self.snekHead.indexY-1]
-            elif self.snekHead.direction == "left":
-                self.snekHead = self.grid[self.snekHead.indexX-1][self.snekHead.indexY]
-            elif self.snekHead.direction == "right":
-                self.snekHead = self.grid[self.snekHead.indexX+1][self.snekHead.indexY]
+        if self.snekHead.indexX-1 < 0:
+            self.snekHead = self.grid[len(self.grid[self.snekHead.indexY])-1][self.snekHead.indexY]
+        elif self.snekHead.indexX+1 > len(self.grid[self.snekHead.indexY])-1:
+            self.snekHead = self.grid[self.snekHead.indexX][self.snekHead.indexY]
 
-        self.snekHead.prev = temp
+        self.snekHead.prev = previous
+        self.snekHead.prev.state = None
 
 
     def on_render(self):
@@ -79,6 +76,8 @@ class SnekGame:
             self.on_render()
 
             pygame.display.flip()
+            pygame.display.update()
+            self.clock.tick(1)
 
         self.on_cleanup()
 
