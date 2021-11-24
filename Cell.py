@@ -15,6 +15,12 @@ class Cell:
         self.direction = None
         self.prev = None
 
+        self.borderRect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.innerRect = pygame.Rect(self.borderRect.x+self.thickness, 
+                                    self.borderRect.y+self.thickness, 
+                                    self.borderRect.w-self.thickness,
+                                    self.borderRect.h-self.thickness)
+
     def render(self):
         if self.state == "head":
             color = pygame.Color(0,255,0)
@@ -24,12 +30,6 @@ class Cell:
             color = pygame.Color(255,0,0)
         else:
             color = pygame.Color(0,0,0)
-        
-        self.borderRect = pygame.Rect(self.x, self.y, self.size, self.size)
-        self.innerRect = pygame.Rect(self.borderRect.x+self.thickness, 
-                                    self.borderRect.y+self.thickness, 
-                                    self.borderRect.w-self.thickness,
-                                    self.borderRect.h-self.thickness)
 
         pygame.draw.rect(self.surface, (255,255,255), self.borderRect, width=self.thickness)  # Border
         pygame.draw.rect(self.surface, color, self.innerRect)

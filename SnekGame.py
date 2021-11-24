@@ -2,6 +2,8 @@ import pygame
 from pygame.locals import *
 from Cell import *
 
+# TODO: FIX MOVEMENT ERROR IN GOING DIAGONAL FOR NO REASON
+
 class SnekGame:
     def __init__(self, width, height, size, thickness=1):
         self.displayRes = self.width, self.height = width, height
@@ -52,11 +54,38 @@ class SnekGame:
     def on_loop(self):
         previous = self.snekHead
 
-        if self.snekHead.indexX-1 < 0:
-            self.snekHead = self.grid[len(self.grid[self.snekHead.indexY])-1][self.snekHead.indexY]
-        elif self.snekHead.indexX+1 > len(self.grid[self.snekHead.indexY])-1:
-            self.snekHead = self.grid[self.snekHead.indexX][self.snekHead.indexY]
+        # Movement
+        if self.snekHead.direction == "up":
+            # Top bounds check
+            if previous.indexY-1 < 0:
+                # Reset at bottom
+                self.snekHead = self.grid[previous.indexX][len(self.grid)-1]
+            else:
+                self.snekHead = self.grid[previous.indexX][previous.indexY-1]
+        elif self.snekHead.direction == "down":
+            # Bottom bounds check
+            if previous.indexY+1 > len(self.grid)-1:
+                # Reset at top
+                self.snekHead = self.grid[previous.indexX][0]
+            else:
+                self.snekHead = self.grid[previous.indexX][previous.indexY+1]
+        elif self.snekHead.direction == "left":
+            # Left bounds check
+            if previous.indexX-1 < 0:
+                # Reset at right
+                self.snekHead = self.grid[len(self.grid[0])-1][previous.indexY]
+            else:
+                self.snekHead = self.grid[previous.indexX-1][previous.indexY]
+        elif self.snekHead.direction == "right":
+            # Right bounds check
+            if previous.indexX+1 > len(self.grid[0])-1:
+                # Reset at left
+                self.snekHead = self.grid[0][previous.indexY]
+            else:
+                self.snekHead = self.grid[previous.indexX+1][previous.indexY]
 
+        self.snekHead.direction = previous.direction
+        self.snekHead.state = "head"
         self.snekHead.prev = previous
         self.snekHead.prev.state = None
 
@@ -77,7 +106,7 @@ class SnekGame:
 
             pygame.display.flip()
             pygame.display.update()
-            self.clock.tick(1)
+            self.clock.tick(5)
 
         self.on_cleanup()
 
