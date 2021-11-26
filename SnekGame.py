@@ -51,13 +51,13 @@ class SnekGame:
         if event.type == pygame.QUIT:
             self.running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and self.snekHead.direction != "down":
                 self.snekHead.direction = "up"
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN and self.snekHead.direction != "up":
                 self.snekHead.direction = "down"
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and self.snekHead.direction != "right":
                 self.snekHead.direction = "left"
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT and self.snekHead.direction != "left":
                 self.snekHead.direction = "right"
     
     def on_loop(self):
@@ -96,7 +96,6 @@ class SnekGame:
         # Apple Check
         if self.snekHead.state == "apple":
             self.snekLength += 1
-            print(self.snekLength)
             self.regenerate_apple()
 
         self.snekHead.state = "head"
@@ -125,7 +124,7 @@ class SnekGame:
 
             pygame.display.flip()
             pygame.display.update()
-            self.clock.tick(10)
+            self.clock.tick(7)
 
         self.on_cleanup()
 
