@@ -9,6 +9,10 @@ class SnekGame:
         self.size = size
         self.thickness = thickness
 
+        # Grid Max Index Size Constants
+        self.indexHeight = (self.height//self.size) - 1
+        self.indexWidth  = (self.width//self.size)  - 1
+
         # Init Window
         pygame.init()
         self.displaySurf = pygame.display.set_mode(self.displayRes, pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -64,12 +68,12 @@ class SnekGame:
             # Top bounds check
             if previous.indexY-1 < 0:
                 # Reset at bottom
-                self.snekHead = self.grid[previous.indexX][len(self.grid)-1]
+                self.snekHead = self.grid[previous.indexX][self.indexHeight]
             else:
                 self.snekHead = self.grid[previous.indexX][previous.indexY-1]
         elif self.snekHead.direction == "down":
             # Bottom bounds check
-            if previous.indexY+1 > len(self.grid)-1:
+            if previous.indexY+1 > self.indexHeight:
                 # Reset at top
                 self.snekHead = self.grid[previous.indexX][0]
             else:
@@ -78,12 +82,12 @@ class SnekGame:
             # Left bounds check
             if previous.indexX-1 < 0:
                 # Reset at right
-                self.snekHead = self.grid[len(self.grid[0])-1][previous.indexY]
+                self.snekHead = self.grid[self.indexWidth][previous.indexY]
             else:
                 self.snekHead = self.grid[previous.indexX-1][previous.indexY]
         elif self.snekHead.direction == "right":
             # Right bounds check
-            if previous.indexX+1 > len(self.grid[0])-1:
+            if previous.indexX+1 > self.indexWidth:
                 # Reset at left
                 self.snekHead = self.grid[0][previous.indexY]
             else:
@@ -101,7 +105,7 @@ class SnekGame:
         self.snekHead.prev.reset()
 
     def regenerate_apple(self):
-        self.apple = self.grid[random.randint(0, len(self.grid)-1)][random.randint(0, len(self.grid[0])-1)]
+        self.apple = self.grid[random.randint(0, self.indexWidth)][random.randint(0, self.indexHeight)]
         self.apple.state = "apple"
         self.apple.render()
 
@@ -121,7 +125,7 @@ class SnekGame:
 
             pygame.display.flip()
             pygame.display.update()
-            self.clock.tick(5)
+            self.clock.tick(10)
 
         self.on_cleanup()
 
