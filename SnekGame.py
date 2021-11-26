@@ -2,8 +2,6 @@ import pygame
 from pygame.locals import *
 from Cell import *
 
-# TODO: FIX MOVEMENT ERROR IN GOING DIAGONAL FOR NO REASON
-
 class SnekGame:
     def __init__(self, width, height, size, thickness=1):
         self.displayRes = self.width, self.height = width, height
@@ -18,9 +16,9 @@ class SnekGame:
         # Init Grid 
         self.grid = []
 
-        for y in range(0, self.height, self.size):
+        for x in range(0, self.height, self.size):
             row = []
-            for x in range(0, self.width, self.size):
+            for y in range(0, self.width, self.size):
                 cell = Cell(self.displaySurf, x, y, self.size)
                 cell.render()
 
@@ -28,7 +26,7 @@ class SnekGame:
             self.grid.append(row)
         
         # Init Snake
-        self.snekHead = self.grid[0][0]
+        self.snekHead = self.grid[1][0]
         self.snekHead.state = "head"
         self.snekHead.render()
 
@@ -53,7 +51,7 @@ class SnekGame:
     
     def on_loop(self):
         previous = self.snekHead
-
+        
         # Movement
         if self.snekHead.direction == "up":
             # Top bounds check
@@ -84,10 +82,11 @@ class SnekGame:
             else:
                 self.snekHead = self.grid[previous.indexX+1][previous.indexY]
 
-        self.snekHead.direction = previous.direction
         self.snekHead.state = "head"
+        self.snekHead.direction = previous.direction
         self.snekHead.prev = previous
         self.snekHead.prev.state = None
+        self.snekHead.prev.direction = None
 
 
     def on_render(self):

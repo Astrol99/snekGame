@@ -13,7 +13,6 @@ class Cell:
         self.indexY = self.y//size
 
         self.direction = None
-        self.prev = None
 
         self.borderRect = pygame.Rect(self.x, self.y, self.size, self.size)
         self.innerRect = pygame.Rect(self.borderRect.x+self.thickness, 
