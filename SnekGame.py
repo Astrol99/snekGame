@@ -112,7 +112,11 @@ class SnekGame:
         current.reset()
 
     def regenerate_apple(self):
-        self.apple = self.grid[random.randint(0, self.indexWidth)][random.randint(0, self.indexHeight)]
+        # Keep on looking for empty cell that new apple can be placed
+        # in order to prevent tragedies i.e. new apple on snek tail
+        # TODO: Add win condition when max length has been reached and fix infinite loop looking for new apple cell at win con
+        while self.apple.state != None:
+            self.apple = self.grid[random.randint(0, self.indexWidth)][random.randint(0, self.indexHeight)]
         self.apple.state = "apple"
         self.apple.render()
 
