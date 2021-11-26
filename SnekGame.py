@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from Cell import *
+import random
 
 class SnekGame:
     def __init__(self, width, height, size, thickness=1):
@@ -28,9 +29,15 @@ class SnekGame:
         # Init Snake
         self.snekHead = self.grid[1][0]
         self.snekHead.state = "head"
+        self.snekHead.direction = "right"
         self.snekHead.render()
 
-        self.snekHead.direction = "right"
+        self.snekLength = 0
+
+        # Init Apple
+        self.apple = self.grid[5][5]
+        self.apple.state = "apple"
+        self.apple.render()
 
         self.clock = pygame.time.Clock()
 
@@ -81,13 +88,22 @@ class SnekGame:
                 self.snekHead = self.grid[0][previous.indexY]
             else:
                 self.snekHead = self.grid[previous.indexX+1][previous.indexY]
+        
+        # Apple Check
+        if self.snekHead.state == "apple":
+            self.snekLength += 1
+            print(self.snekLength)
+            self.regenerate_apple()
 
         self.snekHead.state = "head"
         self.snekHead.direction = previous.direction
         self.snekHead.prev = previous
-        self.snekHead.prev.state = None
-        self.snekHead.prev.direction = None
+        self.snekHead.prev.reset()
 
+    def regenerate_apple(self):
+        self.apple = self.grid[random.randint(0, len(self.grid)-1)][random.randint(0, len(self.grid[0])-1)]
+        self.apple.state = "apple"
+        self.apple.render()
 
     def on_render(self):
         self.snekHead.prev.render()

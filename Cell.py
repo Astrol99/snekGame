@@ -9,16 +9,25 @@ class Cell:
         self.thickness = thickness
         self.state = state
 
+        self.length = 0
+
         self.indexX = self.x//size
         self.indexY = self.y//size
 
         self.direction = None
+        self.prev = None
 
         self.borderRect = pygame.Rect(self.x, self.y, self.size, self.size)
         self.innerRect = pygame.Rect(self.borderRect.x+self.thickness, 
                                     self.borderRect.y+self.thickness, 
                                     self.borderRect.w-self.thickness,
                                     self.borderRect.h-self.thickness)
+
+    def reset(self):
+        self.direction = None
+        self.prev = None
+        self.state = None
+        self.render()
 
     def render(self):
         if self.state == "head":
