@@ -11,7 +11,7 @@ class SnekGame:
 
         # Grid Max Index Size Constants
         self.maxRows = (self.height//self.size) - 1
-        self.maxCols  = (self.width//self.size)  - 1
+        self.maxCols = (self.width//self.size)  - 1
 
         # Init Window
         pygame.init()
@@ -64,15 +64,15 @@ class SnekGame:
     def on_loop(self):
         previous = self.snekHead
         
-        # Movement
+        # Movement and check if within bounds
         if self.snekHead.direction == "up" and self.snekHead.row-1 >= 0:
-            self.snekHead = self.grid[previous.row-1][previous.col]   # Up
+            self.snekHead = self.grid[previous.row-1][previous.col]                         # Up
         elif self.snekHead.direction == "down" and self.snekHead.row+1 <= self.maxRows:
-            self.snekHead = self.grid[previous.row+1][previous.col]   # Down
+            self.snekHead = self.grid[previous.row+1][previous.col]                         # Down
         elif self.snekHead.direction == "left" and self.snekHead.col-1 >= 0:
-            self.snekHead = self.grid[previous.row][previous.col-1]   # Left
+            self.snekHead = self.grid[previous.row][previous.col-1]                         # Left
         elif self.snekHead.direction == "right" and self.snekHead.col+1 <= self.maxCols:
-            self.snekHead = self.grid[previous.row][previous.col+1]
+            self.snekHead = self.grid[previous.row][previous.col+1]                         # Right
         else:
             self.running = False
     
@@ -120,17 +120,15 @@ class SnekGame:
         for row in self.grid:
             new_row = []
             for item in row:
-                if item.state == "apple":
+                if item.state == "head":
                     new_row.append(1)
                 elif item.state == "tail":
                     new_row.append(2)
-                elif item.state == "head":
+                elif item.state == "apple":
                     new_row.append(3)
                 else:
                     new_row.append(0)
-            print(new_row)
             state.append(new_row)
-        print()
         return state
 
     def on_render(self):
@@ -138,7 +136,7 @@ class SnekGame:
 
     def on_cleanup(self):
         pygame.quit()
-    3
+    
     def main(self):
         while self.running:
             for event in pygame.event.get():
@@ -147,9 +145,6 @@ class SnekGame:
             self.on_render()
 
             pygame.display.flip()
-            pygame.display.update()
-            
-            self.get_state()
 
             self.clock.tick(7)
 
