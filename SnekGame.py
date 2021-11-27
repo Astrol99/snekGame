@@ -31,7 +31,7 @@ class SnekGame:
             self.grid.append(row)
         
         # Init Snake
-        self.snekHead = self.grid[1][0]
+        self.snekHead = self.grid[0][0]
         self.snekHead.state = "head"
         self.snekHead.direction = "right"
         self.snekHead.render()
@@ -65,27 +65,17 @@ class SnekGame:
         previous = self.snekHead
         
         # Movement
-        if self.snekHead.direction == "up":
-            if previous.indexY-1 < 0:                                           # Top bounds check
-                self.snekHead = self.grid[previous.indexX][self.indexHeight]    # Reset at bottom
-            else:
-                self.snekHead = self.grid[previous.indexX][previous.indexY-1]   # Up
-        elif self.snekHead.direction == "down":
-            if previous.indexY+1 > self.indexHeight:                            # Bottom bounds check
-                self.snekHead = self.grid[previous.indexX][0]                   # Reset at top
-            else:
-                self.snekHead = self.grid[previous.indexX][previous.indexY+1]   # Down
-        elif self.snekHead.direction == "left":
-            if previous.indexX-1 < 0:                                           # Left bounds check
-                self.snekHead = self.grid[self.indexWidth][previous.indexY]     # Reset at right
-            else:
-                self.snekHead = self.grid[previous.indexX-1][previous.indexY]   # Left
-        elif self.snekHead.direction == "right":
-            if previous.indexX+1 > self.indexWidth:                             # Right bounds check
-                self.snekHead = self.grid[0][previous.indexY]                   # Reset at left
-            else:
-                self.snekHead = self.grid[previous.indexX+1][previous.indexY]   # Right
-        
+        if self.snekHead.direction == "up" and self.snekHead.indexY-1 >= 0:
+            self.snekHead = self.grid[previous.indexX][previous.indexY-1]   # Up
+        elif self.snekHead.direction == "down" and self.snekHead.indexY+1 <= self.indexHeight:
+            self.snekHead = self.grid[previous.indexX][previous.indexY+1]   # Down
+        elif self.snekHead.direction == "left" and self.snekHead.indexX-1 >= 0:
+            self.snekHead = self.grid[previous.indexX-1][previous.indexY]   # Left
+        elif self.snekHead.direction == "right" and self.snekHead.indexX+1 <= self.indexWidth:
+            self.snekHead = self.grid[previous.indexX+1][previous.indexY]   # Right
+        else:
+            self.running = False
+    
         # Collision Checks
         if self.snekHead.state == "apple":
             self.snekLength += 1
@@ -135,7 +125,7 @@ class SnekGame:
 
             pygame.display.flip()
             pygame.display.update()
-            self.clock.tick(10)
+            self.clock.tick(7)
 
         self.on_cleanup()
 
