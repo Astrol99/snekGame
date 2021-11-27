@@ -10,8 +10,8 @@ class SnekGame:
         self.thickness = thickness
 
         # Grid Max Index Size Constants
-        self.indexHeight = (self.height//self.size) - 1
-        self.indexWidth  = (self.width//self.size)  - 1
+        self.maxRows = (self.height//self.size) - 1
+        self.maxCols  = (self.width//self.size)  - 1
 
         # Init Window
         pygame.init()
@@ -21,9 +21,9 @@ class SnekGame:
         # Init Grid 
         self.grid = []
 
-        for x in range(0, self.height, self.size):
+        for y in range(0, self.height, self.size):
             row = []
-            for y in range(0, self.width, self.size):
+            for x in range(0, self.width, self.size):
                 cell = Cell(self.displaySurf, x, y, self.size)
                 cell.render()
 
@@ -65,14 +65,14 @@ class SnekGame:
         previous = self.snekHead
         
         # Movement
-        if self.snekHead.direction == "up" and self.snekHead.indexY-1 >= 0:
-            self.snekHead = self.grid[previous.indexX][previous.indexY-1]   # Up
-        elif self.snekHead.direction == "down" and self.snekHead.indexY+1 <= self.indexHeight:
-            self.snekHead = self.grid[previous.indexX][previous.indexY+1]   # Down
-        elif self.snekHead.direction == "left" and self.snekHead.indexX-1 >= 0:
-            self.snekHead = self.grid[previous.indexX-1][previous.indexY]   # Left
-        elif self.snekHead.direction == "right" and self.snekHead.indexX+1 <= self.indexWidth:
-            self.snekHead = self.grid[previous.indexX+1][previous.indexY]   # Right
+        if self.snekHead.direction == "up" and self.snekHead.row-1 >= 0:
+            self.snekHead = self.grid[previous.row-1][previous.col]   # Up
+        elif self.snekHead.direction == "down" and self.snekHead.row+1 <= self.maxRows:
+            self.snekHead = self.grid[previous.row+1][previous.col]   # Down
+        elif self.snekHead.direction == "left" and self.snekHead.col-1 >= 0:
+            self.snekHead = self.grid[previous.row][previous.col-1]   # Left
+        elif self.snekHead.direction == "right" and self.snekHead.col+1 <= self.maxCols:
+            self.snekHead = self.grid[previous.row][previous.col+1]
         else:
             self.running = False
     
@@ -106,16 +106,39 @@ class SnekGame:
         # in order to prevent tragedies i.e. new apple on snek tail
         # TODO: Add win condition when max length has been reached and fix infinite loop looking for new apple cell at win con
         while self.apple.state != None:
-            self.apple = self.grid[random.randint(0, self.indexWidth)][random.randint(0, self.indexHeight)]
+            self.apple = self.grid[random.randint(0, self.maxRows)][random.randint(0, self.maxCols)]
         self.apple.state = "apple"
         self.apple.render()
+    
+    # Returns new 2D array that represents grid array in simple number states
+    # 0 = empty
+    # 1 = apple
+    # 2 = tail
+    # 3 = head
+    def get_state(self):
+        state = []
+        for row in self.grid:
+            new_row = []
+            for item in row:
+                if item.state == "apple":
+                    new_row.append(1)
+                elif item.state == "tail":
+                    new_row.append(2)
+                elif item.state == "head":
+                    new_row.append(3)
+                else:
+                    new_row.append(0)
+            print(new_row)
+            state.append(new_row)
+        print()
+        return state
 
     def on_render(self):
         self.snekHead.render()
 
     def on_cleanup(self):
         pygame.quit()
-    
+    3
     def main(self):
         while self.running:
             for event in pygame.event.get():
@@ -125,6 +148,9 @@ class SnekGame:
 
             pygame.display.flip()
             pygame.display.update()
+            
+            self.get_state()
+
             self.clock.tick(7)
 
         self.on_cleanup()

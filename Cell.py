@@ -9,8 +9,8 @@ class Cell:
         self.thickness = thickness
         self.state = state
 
-        self.indexX = self.x//size
-        self.indexY = self.y//size
+        self.col = self.x//size
+        self.row = self.y//size
 
         self.direction = None
         self.prev = None
