@@ -4,7 +4,8 @@ from Cell import *
 import random
 
 class SnekGame:
-    def __init__(self, width, height, size, thickness=1):
+    def __init__(self, surface, width, height, size, thickness=1):
+        self.displaySurf = surface
         self.displayRes = self.width, self.height = width, height
         self.size = size
         self.thickness = thickness
@@ -12,11 +13,6 @@ class SnekGame:
         # Grid Max Index Size Constants
         self.maxRows = (self.height//self.size) - 1
         self.maxCols = (self.width//self.size)  - 1
-
-        # Init Window
-        pygame.init()
-        self.displaySurf = pygame.display.set_mode(self.displayRes, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self.running = True
 
         # Init Grid 
         self.grid = []
@@ -42,10 +38,6 @@ class SnekGame:
         self.snekHead.render()
 
         self.snekLength = 0
-
-        self.clock = pygame.time.Clock()
-
-        self.main()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -136,18 +128,3 @@ class SnekGame:
 
     def on_cleanup(self):
         pygame.quit()
-    
-    def main(self):
-        while self.running:
-            for event in pygame.event.get():
-                self.on_event(event)
-            self.on_loop()
-            self.on_render()
-
-            pygame.display.flip()
-
-            self.clock.tick(7)
-
-        self.on_cleanup()
-
-snekGame = SnekGame(width=500, height=200, size=50)

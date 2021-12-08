@@ -1,2 +1,2 @@
 language = "pygame"
-run = "python SnekGame.py"
+run = "python main.py"
