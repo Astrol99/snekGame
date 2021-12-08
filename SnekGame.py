@@ -30,6 +30,11 @@ class SnekGame:
                 row.append(cell)
             self.grid.append(row)
         
+        # Init Apple
+        self.apple = self.grid[0][0]
+        self.apple.state = "blah"
+        self.regenerate_apple()
+        
         # Init Snake
         self.snekHead = self.grid[0][0]
         self.snekHead.state = "head"
@@ -37,11 +42,6 @@ class SnekGame:
         self.snekHead.render()
 
         self.snekLength = 0
-
-        # Init Apple
-        self.apple = self.grid[5][5]
-        self.apple.state = "apple"
-        self.apple.render()
 
         self.clock = pygame.time.Clock()
 
@@ -150,4 +150,4 @@ class SnekGame:
 
         self.on_cleanup()
 
-snekGame = SnekGame(width=500, height=500, size=50)
+snekGame = SnekGame(width=500, height=200, size=50)
