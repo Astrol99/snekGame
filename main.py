@@ -2,18 +2,17 @@ from SnekGame import SnekGame
 import pygame
 from pygame.locals import *
 
-displayRes = width, height = (500, 200)
+displayRes = width, height = (500, 500)
 
 if __name__ == "__main__":
     # Init Window
     pygame.init()
     displaySurf = pygame.display.set_mode(displayRes, pygame.HWSURFACE | pygame.DOUBLEBUF)
     clock = pygame.time.Clock()
-    running = True
 
     snekGame = SnekGame(displaySurf, width, height, size=50)
         
-    while running:
+    while snekGame.running:
         for event in pygame.event.get():
             snekGame.on_event(event)
         snekGame.on_loop()

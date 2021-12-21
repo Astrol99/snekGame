@@ -5,6 +5,7 @@ import random
 
 class SnekGame:
     def __init__(self, surface, width, height, size, thickness=1):
+        self.running = True
         self.displaySurf = surface
         self.displayRes = self.width, self.height = width, height
         self.size = size
